@@ -3,6 +3,8 @@ Tree for Doc Type Grid Editors
 
 This package adds a tree in the developer section, for handling Doc Type Grid Editor package.manifest files. You can also right click a document type, and create a Doc Type Grid Editor directly.
 
+See a demo video here: https://streamable.com/9yvl0
+
 
 ## Installation
 
