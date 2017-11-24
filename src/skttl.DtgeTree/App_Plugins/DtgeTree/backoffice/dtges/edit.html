@@ -1,0 +1,48 @@
+﻿<div ng-controller="DtgeTree.EditController as vm">
+
+	<umb-load-indicator ng-if="vm.page.loading"></umb-load-indicator>
+
+	<form novalidate name="contentTypeForm" val-form-manager>
+
+		<umb-editor-view ng-if="!vm.page.loading">
+
+			<umb-editor-header name="vm.dtge.Name"
+							   alias="vm.dtge.Alias"
+							   icon="vm.dtge.Icon"
+							   description="vm.dtge.Path">
+			</umb-editor-header>
+
+			<umb-editor-container>
+
+				<umb-property property="property" ng-repeat="property in vm.properties">
+					<umb-editor model="property"></umb-editor>
+				</umb-property>
+
+			</umb-editor-container>
+
+			<umb-editor-footer>
+
+				<umb-editor-footer-content-left>
+
+				</umb-editor-footer-content-left>
+
+				<umb-editor-footer-content-right>
+
+					<umb-button type="button"
+								action="vm.save()"
+								state="vm.page.saveButtonState"
+								button-style="success"
+								shortcut="ctrl+s"
+								label="Save"
+								label-key="buttons_save">
+					</umb-button>
+
+				</umb-editor-footer-content-right>
+
+			</umb-editor-footer>
+
+		</umb-editor-view>
+
+	</form>
+
+</div>
