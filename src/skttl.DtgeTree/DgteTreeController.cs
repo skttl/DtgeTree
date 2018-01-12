@@ -89,7 +89,7 @@ namespace skttl.DtgeTree
 			var textService = sender.ApplicationContext.Services.TextService;
 			var treetype = e.QueryStrings.Get("treeType");
 
-			if (e.Menu != null && sender.TreeAlias.ToLower() == "documenttypes")
+			if (e.Menu != null && sender != null && sender.TreeAlias != null && sender.TreeAlias.ToLower() == "documenttypes")
 			{
 				var menuDocTypeId = -1;
 				int.TryParse(e.QueryStrings.Get("id"), out menuDocTypeId);
@@ -100,7 +100,7 @@ namespace skttl.DtgeTree
 					var menuItem = new MenuItem("createDtge", label);
 					menuItem.Icon = "layout";
 					menuItem.NavigateToRoute("/developer/dtges/edit/-1?create=" + menuDocTypeId);
-					e.Menu.Items.Insert(999, menuItem);
+					e.Menu.Items.Insert(e.Menu.Items.Count, menuItem);
 				}
 			}
 		}

@@ -28,9 +28,10 @@
 					$http.get("/umbraco/backoffice/UmbracoApi/ContentType/GetById?id=" + $routeParams.create).then(function (type) {
 						var newDtge = dt.data;
 
-						newDtge.Icon = type.icon;
-						newDtge.Name = type.name;
-						newDtge.Alias = type.alias;
+						newDtge.Icon = type.data.icon;
+						newDtge.Name = type.data.name;
+						newDtge.Alias = type.data.alias;
+						newDtge.AllowedDocTypes.push(type.data.alias);
 
 						init(newDtge);
 
@@ -136,7 +137,7 @@
 					description: "Enables previews of the grid editor in the backoffice",
 					view: "boolean",
 					alias: "enablePreviews",
-					value: dtge.EnablePreview
+					value: dtge.EnablePreview ? "1" : "0"
 				},
 				{
 					label: "Preview view path",

@@ -20,7 +20,7 @@ namespace skttl.DtgeTree
     public class ManifestRepository
 	{
 		private readonly string pluginPrefix = "Dtge";
-		private readonly string _defaultManifest = "{gridEditors:[{\"name\": \"\",\"alias\": \"\",\"view\": \"/App_Plugins/DocTypeGridEditor/Views/doctypegrideditor.html\",\"render\": \"/App_Plugins/DocTypeGridEditor/Render/DocTypeGridEditor.cshtml\",\"icon\": \"icon-document\",\"config\": {\"allowedDocTypes\": [  ], \"nameTemplate\": \"\", \"enablePreview\": true, \"viewPath\": \"/Views/Partials/TypedGrid/Editors/\", \"previewViewPath\": \"/Views/Partials/TypedGrid/Editors/Previews/\", \"previewCssFilePath\": \"\", \"previewJsFilePath\": \"\" }}]}";
+		private readonly string _defaultManifest = "{gridEditors:[{\"name\": \"\",\"alias\": \"\",\"view\": \"/App_Plugins/DocTypeGridEditor/Views/doctypegrideditor.html\",\"render\": \"/Views/Partials/TypedGrid/Editors/DocTypeGridEditor.cshtml\",\"icon\": \"icon-document\",\"config\": {\"allowedDocTypes\": [  ], \"nameTemplate\": \"\", \"enablePreview\": true, \"viewPath\": \"/Views/Partials/TypedGrid/Editors/\", \"previewViewPath\": \"/Views/Partials/TypedGrid/Editors/Previews/\", \"previewCssFilePath\": \"\", \"previewJsFilePath\": \"\" }}]}";
 		private readonly IRuntimeCacheProvider _cache;
 		private readonly IGridConfig _gridConfig;
 

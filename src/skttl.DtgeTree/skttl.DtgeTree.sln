@@ -5,6 +5,15 @@ VisualStudioVersion = 15.0.26403.7
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "skttl.DtgeTree", "skttl.DtgeTree.csproj", "{463E766B-A586-4A76-8938-F239DAF7A646}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "skttl.DgteTree", "skttl.DgteTree", "{D9C5DD0F-3EE1-47DE-B87E-C3C46ED633B8}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\.gitignore = ..\..\.gitignore
+		..\..\Gruntfile.js = ..\..\Gruntfile.js
+		..\..\LICENSE.md = ..\..\LICENSE.md
+		..\..\package.json = ..\..\package.json
+		..\..\README.md = ..\..\README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
