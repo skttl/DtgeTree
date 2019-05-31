@@ -12,8 +12,10 @@ namespace skttl.DtgeTree.Models
 		public string Alias { get; set; }
 		public string Icon { get; set; }
 		public List<string> AllowedDocTypes { get; set; }
-		public bool EnablePreview { get; set; }
-		public string ViewPath { get; set; }
+        public bool EnablePreview { get; set; }
+        public bool LargeDialog { get; set; }
+        public bool ShowDocTypeSelectAsGrid { get; set; }
+        public string ViewPath { get; set; }
 		public string PreviewViewPath { get; set; }
 		public string PackageManifest { get; set; }
 		public dynamic PackageManifestJson { get; set; }

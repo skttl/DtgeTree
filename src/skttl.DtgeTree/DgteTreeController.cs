@@ -17,7 +17,7 @@ using Umbraco.Web.Trees;
 
 namespace skttl.DtgeTree
 {
-	[Tree("developer", "dtges", "Doc Type Grid Editors", "icon-item-arrangement", "icon-item-arrangement")]
+	[Tree(Constants.Applications.Settings, "dtges", TreeTitle =  "Doc Type Grid Editors", TreeGroup = Constants.Trees.Groups.Settings)]
 	[PluginController("DtgeTree")]
 	public class DgteTreeController : TreeController
 	{
@@ -38,7 +38,7 @@ namespace skttl.DtgeTree
 			{
 				var add = new MenuItem("add", "Add new grid editor");
 				add.Icon = "page-add";
-				add.NavigateToRoute("/developer/dtges/edit/-1?create");
+				add.NavigateToRoute("/settings/dtges/edit/-1?create");
 			
 				items.Items.Add(add);
 			}
@@ -73,36 +73,6 @@ namespace skttl.DtgeTree
 			}
 
 			return nodes;
-		}
-	}
-
-
-	public class TreeAction : ApplicationEventHandler
-	{
-		protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
-		{
-			TreeControllerBase.MenuRendering += TreeControllerBase_MenuRendering;
-		}
-
-		void TreeControllerBase_MenuRendering(TreeControllerBase sender, MenuRenderingEventArgs e)
-		{
-			var textService = sender.ApplicationContext.Services.TextService;
-			var treetype = e.QueryStrings.Get("treeType");
-
-			if (e.Menu != null && sender != null && sender.TreeAlias != null && sender.TreeAlias.ToLower() == "documenttypes")
-			{
-				var menuDocTypeId = -1;
-				int.TryParse(e.QueryStrings.Get("id"), out menuDocTypeId);
-
-				if (menuDocTypeId > 0)
-				{
-					var label = "Create DTGE";
-					var menuItem = new MenuItem("createDtge", label);
-					menuItem.Icon = "layout";
-					menuItem.NavigateToRoute("/developer/dtges/edit/-1?create=" + menuDocTypeId);
-					e.Menu.Items.Insert(e.Menu.Items.Count, menuItem);
-				}
-			}
 		}
 	}
 }

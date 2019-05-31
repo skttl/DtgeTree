@@ -14,28 +14,35 @@ using Newtonsoft.Json.Linq;
 using Umbraco.Core.Configuration;
 using Umbraco.Core.IO;
 using Umbraco.Core.Configuration.Grid;
+using Umbraco.Core.Composing;
 
 namespace skttl.DtgeTree
 {
     public class ManifestRepository
 	{
 		private readonly string pluginPrefix = "Dtge";
-		private readonly string _defaultManifest = "{gridEditors:[{\"name\": \"\",\"alias\": \"\",\"view\": \"/App_Plugins/DocTypeGridEditor/Views/doctypegrideditor.html\",\"render\": \"/Views/Partials/TypedGrid/Editors/DocTypeGridEditor.cshtml\",\"icon\": \"icon-document\",\"config\": {\"allowedDocTypes\": [  ], \"nameTemplate\": \"\", \"enablePreview\": true, \"viewPath\": \"/Views/Partials/TypedGrid/Editors/\", \"previewViewPath\": \"/Views/Partials/TypedGrid/Editors/Previews/\", \"previewCssFilePath\": \"\", \"previewJsFilePath\": \"\" }}]}";
-		private readonly IRuntimeCacheProvider _cache;
+		private readonly string _defaultManifest;
+		private readonly IAppPolicyCache _cache;
 		private readonly IGridConfig _gridConfig;
 
 		public ManifestRepository()
 		{
-			_cache = ApplicationContext.Current.ApplicationCache.RuntimeCache;
-
-			_gridConfig = UmbracoConfig.For.GridConfig(
-				ApplicationContext.Current.ProfilingLogger.Logger,
-				_cache,
-				new DirectoryInfo(HttpContext.Current.Server.MapPath(SystemDirectories.AppPlugins)),
-				new DirectoryInfo(HttpContext.Current.Server.MapPath(SystemDirectories.Config)),
-				HttpContext.Current.IsDebuggingEnabled);
-
+            _cache = Current.AppCaches.RuntimeCache;
+			_gridConfig = Current.Configs.GetConfig<IGridConfig>();
+            _defaultManifest = GetDefaultManifest("{gridEditors:[{\"name\": \"\",\"alias\": \"\",\"view\": \"/App_Plugins/DocTypeGridEditor/Views/doctypegrideditor.html\",\"render\": \"/Views/Partials/TypedGrid/Editors/DocTypeGridEditor.cshtml\",\"icon\": \"icon-document\",\"config\": {\"allowedDocTypes\": [  ], \"nameTemplate\": \"\", \"enablePreview\": true, \"largeDialog\": false, \"showDocTypeSelectAsGrid\": false, \"viewPath\": \"/Views/Partials/TypedGrid/Editors/\", \"previewViewPath\": \"/Views/Partials/TypedGrid/Editors/Previews/\", \"previewCssFilePath\": \"\", \"previewJsFilePath\": \"\" }}]}");
 		}
+
+        public string GetDefaultManifest(string fallbackManifest)
+        {
+            var httpContext = HttpContext.Current;
+            if (httpContext == null) return fallbackManifest;
+
+            var defaultManifestPath = httpContext.Server.MapPath("~/App_Plugins/DtgeTree/package.manifest.default");
+
+            if (!File.Exists(defaultManifestPath)) return fallbackManifest;
+
+            return File.ReadAllText(defaultManifestPath);
+        }
 
 		public DtgeManifest ScaffoldManifest()
 		{
@@ -63,7 +70,9 @@ namespace skttl.DtgeTree
 						manifest.AllowedDocTypes.Add(doctype.ToString());
 					}
 					manifest.EnablePreview = gridEditor.config.enablePreview;
-					manifest.ViewPath = gridEditor.config.viewPath != "/Views/Partials/TypedGrid/Editors/" ? gridEditor.config.viewPath : "";
+                    manifest.LargeDialog = gridEditor.config.largeDialog;
+                    manifest.ShowDocTypeSelectAsGrid = gridEditor.config.showDocTypeSelectAsGrid;
+                    manifest.ViewPath = gridEditor.config.viewPath != "/Views/Partials/TypedGrid/Editors/" ? gridEditor.config.viewPath : "";
 					manifest.PreviewViewPath = gridEditor.config.previewViewPath != "/Views/Partials/TypedGrid/Editors/Previews/" ? gridEditor.config.previewViewPath : "";
 					manifest.PackageManifest = manifestString;
 					manifest.PackageManifestJson = manifestContent;
@@ -90,7 +99,7 @@ namespace skttl.DtgeTree
 
 		public List<DtgeManifest> GetAllCachedManifests(bool purgeCache = false)
 		{
-			if (purgeCache) _cache.ClearCacheItem("skttlDtgeTreeManifests");
+			if (purgeCache) _cache.ClearByKey("skttlDtgeTreeManifests");
 			return _cache.GetCacheItem<List<DtgeManifest>>("skttlDtgeTreeManifests", () => GetAllManifests(), new TimeSpan(1, 0, 0));
 		}
 
@@ -158,6 +167,8 @@ namespace skttl.DtgeTree
 			gridEditor.icon = manifest.Icon;
 			gridEditor.config.allowedDocTypes = new JArray(manifest.AllowedDocTypes.ToArray());
 			gridEditor.config.enablePreview = manifest.EnablePreview;
+            gridEditor.config.largeDialog = manifest.LargeDialog;
+            gridEditor.config.showDocTypeSelectAsGrid = manifest.ShowDocTypeSelectAsGrid;
 
 			if (!string.IsNullOrEmpty(manifest.ViewPath)) gridEditor.config.viewPath = manifest.ViewPath;
 			if (!string.IsNullOrEmpty(manifest.PreviewViewPath)) gridEditor.config.previewViewPath = manifest.PreviewViewPath;
